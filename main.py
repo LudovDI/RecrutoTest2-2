@@ -1,3 +1,6 @@
+import os
+
+import uvicorn as uvicorn
 from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
@@ -68,3 +71,9 @@ def login_page():
         </body>
     </html>
     """)
+
+
+# Запуск сервера (добавлено в конец файла)
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 8000))  # Используем порт из переменной окружения
+    uvicorn.run(app, host="0.0.0.0", port=port)
