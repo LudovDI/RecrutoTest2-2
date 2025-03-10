@@ -1,15 +1,14 @@
 import os
-
-import uvicorn as uvicorn
+import random
+import uvicorn
 from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
-import random
 
 app = FastAPI()
 
 # Фейковые пользователи для примера
-dummy_users = {"user": "1111"}
+dummy_users = {"user": "password"}
 sessions = {}
 
 
@@ -20,7 +19,7 @@ def authenticate_user(username: str, password: str):
 @app.post("/token")
 def login(form_data: OAuth2PasswordRequestForm = Depends()):
     if authenticate_user(form_data.username, form_data.password):
-        token = str(random.randint(100000, 999999))  # Простая сессия
+        token = str(random.randint(100000, 999999))
         sessions[token] = form_data.username
         response = RedirectResponse(url=f"/?token={token}", status_code=status.HTTP_303_SEE_OTHER)
         return response
@@ -42,7 +41,7 @@ def read_root(request: Request):
         return RedirectResponse(url="/login")
 
     code = generate_code()
-    del sessions[token]  # Удаляем сессию после загрузки страницы
+    del sessions[token]
     html_content = f"""
     <html>
         <head>
@@ -73,7 +72,6 @@ def login_page():
     """)
 
 
-# Запуск сервера (добавлено в конец файла)
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))  # Используем порт из переменной окружения
+    port = int(os.getenv("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
