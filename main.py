@@ -7,8 +7,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 app = FastAPI()
 
-# Фейковые пользователи для примера
-dummy_users = {"user": "password"}
+dummy_users = {"user": "1111"}
 sessions = {}
 
 
